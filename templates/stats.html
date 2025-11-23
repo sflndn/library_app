@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Статистика - Personal Library{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom: 30px;">Статистика библиотеки</h1>
+
+<div class="stats">
+    <div class="stat-card">
+        <div class="stat-number">{{ total_books }}</div>
+        <div class="stat-label">Всего книг</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number" style="color: #27ae60;">{{ read_books }}</div>
+        <div class="stat-label">Прочитано</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number" style="color: #e74c3c;">{{ unread_books }}</div>
+        <div class="stat-label">Не прочитано</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-number" style="color: #3498db;">{{ completion_rate }}</div>
+        <div class="stat-label">Прогресс</div>
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px;">
+    <div>
+        <h3 style="margin-bottom: 20px;">Статистика по жанрам</h3>
+        {% if genre_stats %}
+            {% for genre, count in genre_stats.items() %}
+            <div style="background: white; padding: 15px; margin-bottom: 10px; border-radius: 5px; border-left: 4px solid #3498db;">
+                <strong>{{ genre }}</strong>
+                <span style="float: right; background: #3498db; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.9rem;">
+                    {{ count }}
+                </span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #7f8c8d; text-align: center;">Нет данных</p>
+        {% endif %}
+    </div>
+
+    <div>
+        <h3 style="margin-bottom: 20px;">Статистика по авторам</h3>
+        {% if author_stats %}
+            {% for author, count in author_stats.items() %}
+            <div style="background: white; padding: 15px; margin-bottom: 10px; border-radius: 5px; border-left: 4px solid #e74c3c;">
+                <strong>{{ author }}</strong>
+                <span style="float: right; background: #e74c3c; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.9rem;">
+                    {{ count }}
+                </span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="color: #7f8c8d; text-align: center;">Нет данных</p>
+        {% endif %}
+    </div>
+</div>
+
+<div style="margin-top: 40px; text-align: center;">
+    <a href="/books" class="btn">Перейти к книгам</a>
+    <a href="/" class="btn">На главную</a>
+</div>
+{% endblock %}

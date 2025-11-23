@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title if title else 'Все книги - Personal Library' }}{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <h1>{% if title %}{{ title }}{% else %}Все книги{% endif %}</h1>
+    <a href="/books/add" class="btn btn-success" style="font-size: 1.1rem; padding: 10px 20px;">
+        Добавить книгу
+    </a>
+</div>
+
+{% if not title %}
+<div style="display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap;">
+    <a href="/books?is_read=true" class="btn btn-success">Прочитанные</a>
+    <a href="/books?is_read=false" class="btn btn-danger">Непрочитанные</a>
+    <a href="/books" class="btn">Все книги</a>
+</div>
+{% endif %}
+
+{% if books %}
+    <div class="books-list">
+        {% for book in books %}
+        <div class="book-card {{ 'read' if book.is_read else 'unread' }}">
+            <div class="book-title">{{ book.title }}</div>
+            <div class="book-author"> {{ book.author }}</div>
+            <div class="book-meta">
+                <span> {{ book.year }} год</span>
+                <span> {{ book.genre }}</span>
+                <span class="status">{{ 'Прочитана' if book.is_read else 'Не прочитана' }}</span>
+                {% if book.rating %}
+                <span class="rating">⭐ {{ book.rating }}/5</span>
+                {% endif %}
+            </div>
+            {% if book.description %}
+            <div style="margin-top: 10px; color: #666;">{{ book.description }}</div>
+            {% endif %}
+            <div style="margin-top: 15px;">
+                <a href="/books/{{ book.id }}" class="btn">Подробнее</a>
+                <a href="/books/{{ book.id }}/edit" class="btn">Редактировать</a>
+                {% if not book.is_read %}
+                <a href="/books/{{ book.id }}/read" class="btn btn-success">Отметить прочитанной</a>
+                {% else %}
+                <a href="/books/{{ book.id }}/unread" class="btn">Вернуть в непрочитанные</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div style="text-align: center; padding: 50px; background: white; border-radius: 8px;">
+        <h3 style="color: #7f8c8d;">Книги не найдены</h3>
+        <p style="color: #95a5a6;">
+            {% if title %}
+            По вашему запросу ничего не найдено
+            {% else %}
+            Библиотека пуста. Добавьте первую книгу в вашу коллекцию!
+            {% endif %}
+        </p>
+        <a href="/books/add" class="btn btn-success" style="margin-top: 15px;">Добавить книгу</a>
+        <a href="/books" class="btn" style="margin-top: 15px;">Ко всем книгам</a>
+    </div>
+{% endif %}
+{% endblock %}

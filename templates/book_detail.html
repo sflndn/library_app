@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} - Personal Library{% endblock %}
+
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <a href="/books" class="btn" style="margin-bottom: 20px;">← Назад к списку</a>
+
+    <div class="book-card {{ 'read' if book.is_read else 'unread' }}" style="margin-bottom: 20px;">
+        <h1 style="font-size: 2rem; margin-bottom: 10px; color: #2c3e50;">{{ book.title }}</h1>
+        <div style="font-size: 1.2rem; color: #7f8c8d; margin-bottom: 20px;"> {{ book.author }}</div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+            <div>
+                <strong>Год издания:</strong><br>
+                {{ book.year }}
+            </div>
+            <div>
+                <strong>Жанр:</strong><br>
+                {{ book.genre }}
+            </div>
+            <div>
+                <strong>Статус:</strong><br>
+                {{ 'Прочитана' if book.is_read else 'Не прочитана' }}
+            </div>
+            {% if book.rating %}
+            <div>
+                <strong>Рейтинг:</strong><br>
+                {{ book.rating }}/5
+            </div>
+            {% endif %}
+        </div>
+
+        {% if book.description %}
+        <div style="margin-top: 20px;">
+            <strong>Описание:</strong>
+            <p style="margin-top: 10px; line-height: 1.6;">{{ book.description }}</p>
+        </div>
+        {% endif %}
+    </div>
+
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <a href="/books/{{ book.id }}/edit" class="btn">Редактировать</a>
+        {% if not book.is_read %}
+        <a href="/books/{{ book.id }}/read" class="btn btn-success">Отметить прочитанной</a>
+        {% else %}
+        <a href="/books/{{ book.id }}/unread" class="btn">Вернуть в непрочитанные</a>
+        {% endif %}
+        <a href="/books/author/{{ book.author | urlencode }}" class="btn">Книги этого автора</a>
+        <a href="/books/genre/{{ book.genre | urlencode }}" class="btn">Книги этого жанра</a>
+    </div>
+</div>
+{% endblock %}
